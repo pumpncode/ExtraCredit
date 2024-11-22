@@ -406,7 +406,7 @@ SMODS.Joker{ --Warlock
             card.ability.extra.checks = 1
 
         
-        elseif context.cardarea == G.play and context.individual then
+        elseif context.cardarea == G.play and context.individual and context.other_card.ability.name == "Lucky Card" then
             if pseudorandom('witch') < G.GAME.probabilities.normal / card.ability.extra.odds then
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
