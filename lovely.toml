@@ -1,0 +1,21 @@
+
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+
+
+
+#Negative bonus chips UI
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+                    bonus_chips = (self.ability.bonus + (self.ability.perma_bonus or 0)) > 0 and (self.ability.bonus + (self.ability.perma_bonus or 0)) or nil,
+'''
+position = "at"
+payload = '''
+                    bonus_chips = (self.ability.bonus + (self.ability.perma_bonus or 0)) ~= 0 and (self.ability.bonus + (self.ability.perma_bonus or 0)) or nil,
+'''
+match_indent = true
