@@ -10,7 +10,7 @@ Programming:
 
 Art:
 - kittyknight
-- Expelsword
+- UselessReptile8
 - Wingcap
 - HonuKane
 - bishopcorrigan
@@ -27,3 +27,9 @@ Concepting:
 - Wingcap
 - AlasBabylon
 - HonuKane
+
+Special thanks:
+- Djynasty
+- Stupid
+- InertSteak
+- Akai
