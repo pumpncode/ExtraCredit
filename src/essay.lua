@@ -126,7 +126,7 @@ SMODS.Joker{ --Starfruit
             card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_level_up_ex')})
             update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(text, 'poker_hands'),chips = G.GAME.hands[text].chips, mult = G.GAME.hands[text].mult, level=G.GAME.hands[text].level})
             level_up_hand(context.blueprint_card or card, text, nil, 1)
-            update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+            update_hand_text({sound = 'button', modded = true}, {chips = hand_chips, mult = mult})
             if not context.blueprint then
                 card.ability.extra.uses = card.ability.extra.uses - 1
                 if card.ability.extra.uses <= 0 then
@@ -196,45 +196,9 @@ SMODS.Joker{ --Eclipse
             card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
             update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(text, 'poker_hands'),chips = G.GAME.hands[text].chips, mult = G.GAME.hands[text].mult, level=G.GAME.hands[text].level})
             level_up_hand(context.blueprint_card or card, text, nil, -1)
-            update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+            update_hand_text({sound = 'button', modded = true}, {chips = hand_chips, mult = mult})
 
-            if text == "High Card" then
-                card.ability.extra.chips = card.ability.extra.chips + 10
-            
-            elseif text == "Pair" then
-                card.ability.extra.chips = card.ability.extra.chips + 15
-
-            elseif text == "Three of a Kind" then
-                card.ability.extra.chips = card.ability.extra.chips + 20
-
-            elseif text == "Full House" then
-                card.ability.extra.chips = card.ability.extra.chips + 25
-
-            elseif text == "Four of a Kind" then
-                card.ability.extra.chips = card.ability.extra.chips + 30
-
-            elseif text == "Flush" then
-                card.ability.extra.chips = card.ability.extra.chips + 15
-                
-            elseif text == "Straight" then
-                card.ability.extra.chips = card.ability.extra.chips + 30
-
-            elseif text == "Two Pair" then
-                card.ability.extra.chips = card.ability.extra.chips + 20
-
-            elseif text == "Straight Flush" then
-                card.ability.extra.chips = card.ability.extra.chips + 40
-
-            elseif text == "Five of a Kind" then
-                card.ability.extra.chips = card.ability.extra.chips + 35
-
-            elseif text == "Flush House" then
-                card.ability.extra.chips = card.ability.extra.chips + 40
-
-            elseif text == "Flush Five" then
-                card.ability.extra.chips = card.ability.extra.chips + 50
-
-            end
+            card.ability.extra.chips = card.ability.extra.chips + G.GAME.hands[text].l_chips
 
         elseif context.cardarea == G.jokers and card.ability.extra.chips > 0 and context.joker_main then
             return {
