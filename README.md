@@ -33,3 +33,6 @@ Special thanks:
 - Stupid
 - InertSteak
 - Akai
+
+
+If you're supposed to be on this list somewhere and aren't, please reach out to me on discord! My username is campfirecollective
