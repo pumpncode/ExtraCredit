@@ -10,7 +10,7 @@ Programming:
 
 Art:
 - kittyknight
-- expelsword
+- Expelsword
 - Wingcap
 - HonuKane
 - bishopcorrigan
@@ -21,7 +21,9 @@ Concepting:
 - kittyknight
 - Audrizzle
 - Neon
-- expelsword
+- Expelsword
 - tuzzo
 - bishopcorrigan
 - Wingcap
+- AlasBabylon
+- HonuKane
