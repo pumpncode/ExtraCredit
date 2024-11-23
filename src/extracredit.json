@@ -6,7 +6,7 @@
 	"description": "A coupla vanilla-flavor jokers for Balatro University",
 	"prefix": "ExtraCredit",
 	"main_file": "essay.lua",
-	"priority": 100,
+	"priority": 1,
 	"badge_colour": "006A00",
 	"badge_text_colour": "FBA105",
 	"version": "0.9.1",
