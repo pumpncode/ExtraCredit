@@ -9,7 +9,7 @@ SMODS.Joker{ --Forklift
     key = "forklift",
     config = {
         extra = {
-            card_limit = 2
+            card_limit = 1
         }
     },
     loc_txt = {
