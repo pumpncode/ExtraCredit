@@ -3,13 +3,13 @@
 	"name": "ExtraCredit",
 	"display_name": "Extra Credit",
 	"author": ["CampfireCollective"],
-	"description": "A coupla vanilla-flavor jokers for Balatro University",
+	"description": "A small-scale vanilla-style content mod for Balatro University! Art by kittyknight, UselessReptile8, Wingcap, HonuKane, and bishopcorrigan. Please see the README file for full credits.",
 	"prefix": "ExtraCredit",
 	"main_file": "essay.lua",
 	"priority": 1,
 	"badge_colour": "006A00",
 	"badge_text_colour": "FBA105",
-	"version": "0.9.0",
+	"version": "1.0.0",
 	"dependencies": [
 		{
 			"id": "Steamodded",
