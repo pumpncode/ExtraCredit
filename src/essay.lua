@@ -2,8 +2,6 @@
 local mod = SMODS.current_mod
 SMODS.Atlas({key = "ECjokers", path = "ECjokers.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 
--- Page 1 Jokers
-
 SMODS.Joker{ --Forklift
     name = "Forklift",
     key = "forklift",
@@ -128,6 +126,7 @@ SMODS.Joker{ --Starfruit
             card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_level_up_ex')})
             update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(text, 'poker_hands'),chips = G.GAME.hands[text].chips, mult = G.GAME.hands[text].mult, level=G.GAME.hands[text].level})
             level_up_hand(context.blueprint_card or card, text, nil, 1)
+            update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
             if not context.blueprint then
                 card.ability.extra.uses = card.ability.extra.uses - 1
                 if card.ability.extra.uses <= 0 then
@@ -197,7 +196,45 @@ SMODS.Joker{ --Eclipse
             card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
             update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(text, 'poker_hands'),chips = G.GAME.hands[text].chips, mult = G.GAME.hands[text].mult, level=G.GAME.hands[text].level})
             level_up_hand(context.blueprint_card or card, text, nil, -1)
-            card.ability.extra.chips = card.ability.extra.chips + G.GAME.hands[text].l_chips
+            update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+
+            if text == "High Card" then
+                card.ability.extra.chips = card.ability.extra.chips + 10
+            
+            elseif text == "Pair" then
+                card.ability.extra.chips = card.ability.extra.chips + 15
+
+            elseif text == "Three of a Kind" then
+                card.ability.extra.chips = card.ability.extra.chips + 20
+
+            elseif text == "Full House" then
+                card.ability.extra.chips = card.ability.extra.chips + 25
+
+            elseif text == "Four of a Kind" then
+                card.ability.extra.chips = card.ability.extra.chips + 30
+
+            elseif text == "Flush" then
+                card.ability.extra.chips = card.ability.extra.chips + 15
+                
+            elseif text == "Straight" then
+                card.ability.extra.chips = card.ability.extra.chips + 30
+
+            elseif text == "Two Pair" then
+                card.ability.extra.chips = card.ability.extra.chips + 20
+
+            elseif text == "Straight Flush" then
+                card.ability.extra.chips = card.ability.extra.chips + 40
+
+            elseif text == "Five of a Kind" then
+                card.ability.extra.chips = card.ability.extra.chips + 35
+
+            elseif text == "Flush House" then
+                card.ability.extra.chips = card.ability.extra.chips + 40
+
+            elseif text == "Flush Five" then
+                card.ability.extra.chips = card.ability.extra.chips + 50
+
+            end
 
         elseif context.cardarea == G.jokers and card.ability.extra.chips > 0 and context.joker_main then
             return {
@@ -323,23 +360,16 @@ SMODS.Joker{ --Pocket Aces
 
 }
 
-local function contains(table_, value)
-    for _, v in pairs(table_) do
-        if v == value then
-            return true
-        end
-    end
-
-    return false
-end
-
 SMODS.Joker{ --Warlock             
     name = "Warlock",
     key = "warlock",
     config = {
         extra = {
             odds = 7,
+            destructo = {nil},
+            checks = 1,
             succeed = false,
+            length = 1
         }
     },
     loc_txt = {
@@ -362,7 +392,7 @@ SMODS.Joker{ --Warlock
     perishable_compat = true,
     unlocked = true,
     discovered = true,
-    enhancement_gate = "m_lucky",
+    enhancement_gate = "m_wild",
     atlas = 'ECjokers',
 
     loc_vars = function (self, info_queue, card)
@@ -373,7 +403,7 @@ SMODS.Joker{ --Warlock
     calculate = function(self, card, context)
 
         if context.before and not context.blueprint then
-            card.ability.extra.destructo = {}
+            card.ability.extra.checks = 1
 
         
         elseif context.cardarea == G.play and context.individual and context.other_card.ability.name == "Lucky Card" then
@@ -393,19 +423,249 @@ SMODS.Joker{ --Warlock
                         end)}))
                     card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral})
 
-                    if not contains(card.ability.extra.destructo, context.other_card) then
-                        card.ability.extra.destructo[#card.ability.extra.destructo + 1] = context.other_card
-                    end
+                    for i=1, (#card.ability.extra.destructo + 1) do
+                        if card.ability.extra.destructo[i] == nil then 
+                            card.ability.extra.destructo[i] = context.other_card 
+                            card.ability.extra.length = #card.ability.extra.destructo
+                            break
+                        end
+                    end 
                 end
             end
 
         elseif context.destroying_card and not context.blueprint then
-            return contains(card.ability.extra.destructo, context.destroying_card)
-        elseif context.after and not context.blueprint then
-            card.ability.extra.destructo = nil
+            card.ability.extra.succeed = false
+            if card.ability.extra.checks == 5 then
+                for i=1, card.ability.extra.length do
+                    if context.full_hand[5] == card.ability.extra.destructo[i] then
+                        card.ability.extra.destructo[i] = nil
+                        card.ability.extra.succeed = true
+                    end
+                end
+                card.ability.extra.checks = 1
+                if card.ability.extra.succeed then
+                    return true
+                end
+                return nil
+            end
+
+            if card.ability.extra.checks == 4 then
+                for i=1, card.ability.extra.length do
+                    if context.full_hand[4] == card.ability.extra.destructo[i] then
+                        card.ability.extra.destructo[i] = nil
+                        card.ability.extra.succeed = true
+                    end
+                end
+                card.ability.extra.checks = 5
+                if card.ability.extra.succeed then
+                    return true
+                end
+                return nil
+            end
+
+            if card.ability.extra.checks == 3 then
+                for i=1, card.ability.extra.length do
+                    if context.full_hand[3] == card.ability.extra.destructo[i] then
+                        card.ability.extra.destructo[i] = nil
+                        card.ability.extra.succeed = true
+                    end
+                end
+                card.ability.extra.checks = 4
+                if card.ability.extra.succeed then
+                    return true
+                end
+                return nil
+            end
+
+            if card.ability.extra.checks == 2 then
+                for i=1, card.ability.extra.length do
+                    if context.full_hand[2] == card.ability.extra.destructo[i] then
+                        card.ability.extra.destructo[i] = nil
+                        card.ability.extra.succeed = true
+                    end
+                end
+                card.ability.extra.checks = 3
+                if card.ability.extra.succeed then
+                    return true
+                end
+                return nil
+            end
+
+            if card.ability.extra.checks == 1 then
+                for i=1, card.ability.extra.length do
+                    if context.full_hand[1] == card.ability.extra.destructo[i] then
+                        card.ability.extra.destructo[i] = nil
+                        card.ability.extra.succeed = true
+                    end
+                end
+                card.ability.extra.checks = 2
+                if card.ability.extra.succeed then
+                    return true
+                end
+                return nil
+            end
+            return nil
         end
     end
 }
+
+-- SMODS.Joker{ --Warlock             RISK OF GHOST CARDS VERSION
+--     name = "Warlock",
+--     key = "warlock",
+--     config = {
+--         extra = {
+--             odds = 7,
+--             destructo = {
+--                 [1] = nil               
+--             }
+--         }
+--     },
+--     loc_txt = {
+--         ['name'] = 'Warlock',
+--         ['text'] = {
+--             [1] = 'Played {C:attention}Lucky Cards{} have a',
+--             [2] = '{C:green}#1# in #2#{} chance to be {C:attention}destroyed',
+--             [3] = 'and spawn a {C:spectral}Spectral Card{} when scored'
+--         }
+--     },
+--     pos = {
+--         x = 6,
+--         y = 0
+--     },
+--     cost = 6,
+--     rarity = 2,
+--     blueprint_compat = true,
+--     eternal_compat = true,
+--     perishable_compat = false,
+--     unlocked = true,
+--     discovered = true,
+--     enhancement_gate = "m_wild",
+--     atlas = 'ECjokers',
+
+--     loc_vars = function (self, info_queue, card)
+--         info_queue[#info_queue+1] = G.P_CENTERS.m_lucky 
+--         return {vars = {G.GAME.probabilities.normal, card.ability.extra.odds, card.ability.extra.destructo}}
+--     end,
+
+--     calculate = function(self, card, context)
+--         if context.cardarea == G.play and context.individual and context.other_card.ability.name == 'Lucky Card' then
+--             if pseudorandom('witch') < G.GAME.probabilities.normal / card.ability.extra.odds then
+--                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+--                     G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+--                     G.E_MANAGER:add_event(Event({
+--                         trigger = 'before',
+--                         delay = 0.0,
+--                         func = (function()
+--                                 local card = create_card('Spectral',G.consumeables, nil, nil, nil, nil, nil, 'witch')
+--                                 card:add_to_deck()
+--                                 G.consumeables:emplace(card)
+--                                 G.GAME.consumeable_buffer = 0
+--                                 context.other_card:juice_up(0.5, 0.5)
+--                             return true
+--                         end)}))
+--                     card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral})
+
+--                     for i=1, (#card.ability.extra.destructo + 1) do
+--                         if card.ability.extra.destructo[i] == nil then 
+--                             card.ability.extra.destructo[i] = context.other_card break
+--                         end
+--                     end 
+--                 end
+--             end
+
+--         elseif context.after and not context.blueprint then
+--             for i=1, (#card.ability.extra.destructo) do
+--                 if card.ability.extra.destructo[i] ~= nil then
+--                     G.E_MANAGER:add_event(Event({
+--                         trigger = 'after',
+--                         delay = 0.2,
+--                         func = (function() 
+--                         card.ability.extra.destructo[i]:start_dissolve()
+--                         return true end )}))
+--                 end
+--             end
+
+--         elseif context.end_of_round and not context.repetition and not context.individual and not context.blueprint then
+--             for i=1, (#card.ability.extra.destructo) do
+--                 if card.ability.extra.destructo[i] ~= nil then
+--                     G.deck:remove_card(card.ability.extra.destructo[i])
+--                     G.discard:remove_card(card.ability.extra.destructo[i])
+--                     card.ability.extra.destructo[i] = nil             
+--                 end
+--             end
+--         end
+--     end
+-- }
+
+-- SMODS.Joker{ --Warlock          VISUAL JANK VERSION
+--     name = "Warlock",
+--     key = "warlock",
+--     config = {
+--         extra = {
+--             odds = 7,
+--         }
+--     },
+--     loc_txt = {
+--         ['name'] = 'Warlock',
+--         ['text'] = {
+--             [1] = 'Played {C:attention}Lucky Cards{} have a',
+--             [2] = '{C:green}#1# in #2#{} chance to be {C:attention}destroyed',
+--             [3] = 'and spawn a {C:spectral}Spectral Card{} when scored'
+--         }
+--     },
+--     pos = {
+--         x = 6,
+--         y = 0
+--     },
+--     cost = 6,
+--     rarity = 2,
+--     blueprint_compat = true,
+--     eternal_compat = true,
+--     perishable_compat = false,
+--     unlocked = true,
+--     discovered = true,
+--     enhancement_gate = "m_wild",
+--     atlas = 'ECjokers',
+
+--     loc_vars = function (self, info_queue, card)
+--         info_queue[#info_queue+1] = G.P_CENTERS.m_lucky 
+--         return {vars = {G.GAME.probabilities.normal, card.ability.extra.odds}}
+--     end,
+
+--     calculate = function(self, card, context)
+--         if context.cardarea == G.play and context.individual and context.other_card.ability.name == 'Lucky Card' then
+--             if pseudorandom('witch') < G.GAME.probabilities.normal / card.ability.extra.odds then
+--                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+--                     G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+--                     G.E_MANAGER:add_event(Event({
+--                         trigger = 'before',
+--                         delay = 0.0,
+--                         func = (function()
+--                                 local card = create_card('Spectral',G.consumeables, nil, nil, nil, nil, nil, 'witch')
+--                                 card:add_to_deck()
+--                                 G.consumeables:emplace(card)
+--                                 G.GAME.consumeable_buffer = 0
+--                             return true
+--                         end)}))
+--                     card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral})
+
+--                     if context.other_card ~= nil then
+--                         G.E_MANAGER:add_event(Event({
+--                             trigger = 'after',
+--                             delay = 0.2,
+--                             func = function() 
+--                                 context.other_card.getting_sliced = true
+--                                 context.other_card:start_dissolve()
+--                             return true end }))
+--                     end
+--                     if context.other_card.area ~= nil then
+--                         context.other_card.area:remove_card(context.other_card)
+--                     end
+--                 end
+--             end
+--         end
+--     end
+-- }
 
 SMODS.Joker{ --Purple Joker
     name = "Purple Joker",
@@ -471,8 +731,7 @@ SMODS.Joker{ --Compost
         extra = {
             mult = 0,
             mod = 1,
-            fill = 0,
-            do_once = true
+            fill = 0
         }
     },
     loc_txt = {
@@ -502,7 +761,7 @@ SMODS.Joker{ --Compost
 
     calculate = function(self, card, context)
 
-        if context.discard and not context.blueprint and card.ability.extra.do_once then
+        if context.discard and not context.blueprint then
             card.ability.extra.fill = card.ability.extra.fill + 1
             if card.ability.extra.fill == 3 then
                 card.ability.extra.fill = 0
@@ -514,7 +773,6 @@ SMODS.Joker{ --Compost
                 }
             end
             if card.ability.extra.mult >= 20 then
-                card.ability.extra.do_once = false
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         play_sound('tarot1')
@@ -875,5 +1133,3 @@ SMODS.Joker{ --Ten Gallon
         end
     end
 }
-
--- Page 2 Jokers
