@@ -326,7 +326,7 @@ SMODS.Joker{ --Eclipse
         x = 3,
         y = 0
      },
-    cost = 7,
+    cost = 8,
     rarity = 3,
     blueprint_compat = true,
     eternal_compat = true,
