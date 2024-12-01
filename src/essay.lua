@@ -9,7 +9,7 @@ SMODS.Joker{ --Forklift
     key = "forklift",
     config = {
         extra = {
-            card_limit = 1
+            card_limit = 2
         }
     },
     loc_txt = {
@@ -166,7 +166,7 @@ SMODS.Joker{ --Eclipse
     key = "eclipse",
     config = {
         extra = {
-            chip_mod = 10
+            chip_mod = 12
         }
     },
     loc_txt = {
@@ -181,7 +181,7 @@ SMODS.Joker{ --Eclipse
         x = 3,
         y = 0
      },
-    cost = 9,
+    cost = 8,
     rarity = 3,
     blueprint_compat = true,
     eternal_compat = true,
@@ -191,7 +191,7 @@ SMODS.Joker{ --Eclipse
     atlas = 'ECjokers',
 
     loc_vars = function(self, info_queue, card)
-        return {vars = {((sum_levels()-12)*10), card.ability.extra.chip_mod}}
+        return {vars = {((sum_levels()-12)*12), card.ability.extra.chip_mod}}
     end,
 
     calculate = function(self, card, context)
@@ -200,8 +200,8 @@ SMODS.Joker{ --Eclipse
 
         elseif context.cardarea == G.jokers and (sum_levels() - 12) > 0 and context.joker_main then
             return {
-                message = localize{type='variable',key='a_chips',vars={(sum_levels()-12)*10}},
-                chip_mod = (sum_levels()-12)*10,
+                message = localize{type='variable',key='a_chips',vars={(sum_levels()-12)*12}},
+                chip_mod = (sum_levels()-12)*12,
                 colour = G.C.CHIPS
             }
         end
