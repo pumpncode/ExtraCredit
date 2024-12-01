@@ -60,7 +60,7 @@ SMODS.current_mod.extra_tabs = function() --Credits tab
                     {
                     n = G.UIT.T,
                     config = {
-                        text = "Honukane, bishopcorrigan, tuzzo",
+                        text = "Honukane, bishopcorrigan, tuzzo, R3venantR3mnant",
                         shadow = false,
                         scale = scale,
                         colour = G.C.MONEY
@@ -154,7 +154,7 @@ SMODS.Joker{ --Forklift
     key = "forklift",
     config = {
         extra = {
-            card_limit = 1
+            card_limit = 2
         }
     },
     loc_txt = {
@@ -311,7 +311,7 @@ SMODS.Joker{ --Eclipse
     key = "eclipse",
     config = {
         extra = {
-            chip_mod = 10
+            chip_mod = 12
         }
     },
     loc_txt = {
@@ -326,7 +326,7 @@ SMODS.Joker{ --Eclipse
         x = 3,
         y = 0
      },
-    cost = 9,
+    cost = 7,
     rarity = 3,
     blueprint_compat = true,
     eternal_compat = true,
@@ -336,17 +336,14 @@ SMODS.Joker{ --Eclipse
     atlas = 'ECjokers',
 
     loc_vars = function(self, info_queue, card)
-        return {vars = {((sum_levels()-12)*10), card.ability.extra.chip_mod}}
+        return {vars = {((sum_levels()-12)*card.ability.extra.chip_mod), card.ability.extra.chip_mod}}
     end,
 
     calculate = function(self, card, context)
-        if context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 and context.before and not context.blueprint and G.GAME.hands[context.scoring_name].level > 1 then 
-            
-
-        elseif context.cardarea == G.jokers and (sum_levels() - 12) > 0 and context.joker_main then
+        if context.cardarea == G.jokers and (sum_levels() - 12) > 0 and context.joker_main then
             return {
-                message = localize{type='variable',key='a_chips',vars={(sum_levels()-12)*10}},
-                chip_mod = (sum_levels()-12)*10,
+                message = localize{type='variable',key='a_chips',vars={(sum_levels()-12)*card.ability.extra.chip_mod}},
+                chip_mod = (sum_levels()-12)*card.ability.extra.chip_mod,
                 colour = G.C.CHIPS
             }
         end
@@ -572,7 +569,7 @@ SMODS.Joker{ --Purple Joker
         x = 7,
         y = 0
     },
-    cost = 6,
+    cost = 4,
     rarity = 1,
     blueprint_compat = true,
     eternal_compat = true,
@@ -596,7 +593,7 @@ SMODS.Joker{ --Purple Joker
                 }
             end
         
-        elseif context.cardarea == G.jokers and context.joker_main and context.scoring_hand then
+        elseif context.cardarea == G.jokers and context.joker_main and context.scoring_hand and card.ability.extra.mulchs > 1 then
             return{
                 colour = G.C.PURPLE, --color doesn't work :(
                 message = "+"..card.ability.extra.mulchs.." Mulchs!",
