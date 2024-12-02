@@ -1,6 +1,9 @@
 local mod = SMODS.current_mod
 SMODS.Atlas({key = "ECjokers", path = "ECjokers.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 
+ECconfig = SMODS.current_mod.config
+mod_path = ""..SMODS.current_mod.path
+
 SMODS.current_mod.extra_tabs = function() --Credits tab
     local scale = 0.5
     return {
@@ -146,9 +149,37 @@ SMODS.current_mod.extra_tabs = function() --Credits tab
     }
 end
 
+SMODS.current_mod.config_tab = function() --Config tab
+    return {
+      n = G.UIT.ROOT,
+      config = {
+        align = "cm",
+        padding = 0.05,
+        colour = G.C.CLEAR,
+      },
+      nodes = {
+        create_toggle({
+            label = "Page 1 Jokers (restart required)",
+            ref_table = ECconfig,
+            ref_value = "wave1",
+            callback = function(_set_toggle)
+                NFS.write(mod_path.."/config.lua", STR_PACK(ECconfig))
+            end,
+        }),
+        create_toggle({
+            label = "Page 2 Jokers (restart required)",
+            ref_table = ECconfig,
+            ref_value = "wave2",
+            callback = function(_set_toggle)
+                NFS.write(mod_path.."/config.lua", STR_PACK(ECconfig))
+            end,
+        }),
+      },
+    }
+end
 
 -- Page 1 Jokers
-
+if ECconfig.wave1 then
 SMODS.Joker{ --Forklift
     name = "Forklift",
     key = "forklift",
@@ -166,7 +197,7 @@ SMODS.Joker{ --Forklift
     pos = {
         x = 0,
         y = 0
-     },
+    },
     cost = 4,
     rarity = 1,
     blueprint_compat = false,
@@ -208,7 +239,7 @@ SMODS.Joker{ --Double Rainbow
     pos = {
         x = 1,
         y = 0
-     },
+    },
     enhancement_gate = 'm_lucky',
     cost = 5,
     rarity = 2,
@@ -254,7 +285,7 @@ SMODS.Joker{ --Starfruit
     pos = {
         x = 2,
         y = 0
-     },
+    },
     cost = 6,
     rarity = 1,
     blueprint_compat = true,
@@ -325,7 +356,7 @@ SMODS.Joker{ --Eclipse
     pos = {
         x = 3,
         y = 0
-     },
+    },
     cost = 8,
     rarity = 3,
     blueprint_compat = true,
@@ -370,7 +401,7 @@ SMODS.Joker{ --Rubber Ducky
     pos = {
         x = 4,
         y = 0
-     },
+    },
     cost = 5,
     rarity = 2,
     blueprint_compat = true,
@@ -433,7 +464,7 @@ SMODS.Joker{ --Pocket Aces
     pos = {
         x = 5,
         y = 0
-     },
+    },
     cost = 6,
     rarity = 2,
     blueprint_compat = false,
@@ -627,7 +658,7 @@ SMODS.Joker{ --Compost
     pos = {
         x = 8,
         y = 0
-     },
+    },
     cost = 4,
     rarity = 1,
     blueprint_compat = true,
@@ -1018,9 +1049,10 @@ SMODS.Joker{ --Ten Gallon
         end
     end
 }
+end
 
 -- Page 2 Jokers
-
+if ECconfig.wave2 then
 SMODS.Joker{ --Monte Haul
     name = "Monte Haul",
     key = "montehaul",
@@ -1387,7 +1419,7 @@ SMODS.Joker{ --Ouppy Bog
                             return true
                         end
                     }))
-                   
+                
                 end
             end
             card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}}})
@@ -1786,7 +1818,7 @@ SMODS.Joker{ --Ship of Theseus
                 if not context.blueprint then
                     card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
                 end
-               
+            
                 G.E_MANAGER:add_event(Event({
                 func = function() 
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
@@ -1817,7 +1849,7 @@ SMODS.Joker{ --Ship of Theseus
                 if not context.blueprint then
                     card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
                 end
-               
+            
                 G.E_MANAGER:add_event(Event({
                 func = function() 
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
@@ -1966,3 +1998,4 @@ SMODS.Joker{ --Go Fish
         end 
     end
 }
+end
