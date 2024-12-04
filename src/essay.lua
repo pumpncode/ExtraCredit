@@ -247,7 +247,7 @@ SMODS.Joker{ --Double Rainbow
     loc_txt = {
         ['name'] = 'Double Rainbow',
         ['text'] = {
-            [1] = '{C:attention}Retrigger{} played {C:attention}Lucky Cards{}'
+            [1] = '{C:attention}Retrigger{} all {C:attention}Lucky Cards{}'
         }
     },
     pos = {
@@ -270,6 +270,13 @@ SMODS.Joker{ --Double Rainbow
 
     calculate = function(self, card, context)
         if context.repetition and context.cardarea == G.play and context.other_card.ability.name == 'Lucky Card' then
+            return {
+                message = localize('k_again_ex'),
+                repetitions = 1,
+                card = card
+            }
+        
+        elseif context.repetition and context.cardarea == G.hand and context.other_card.ability.name == 'Lucky Card' then
             return {
                 message = localize('k_again_ex'),
                 repetitions = 1,
