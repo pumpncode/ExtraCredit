@@ -1242,7 +1242,7 @@ SMODS.Joker{ --Traffic Light
     key = "trafficlight",
     config = {
         extra = {
-            Xmult = 1,
+            Xmult = 2,
             Xmult_mod = 0.5
         }
     },
@@ -1250,9 +1250,9 @@ SMODS.Joker{ --Traffic Light
         ['name'] = 'Traffic Light',
         ['text'] = {
             [1] = 'Gives {X:mult,C:white}X#1#{} Mult',
-            [2] = 'Increases by {X:mult,C:white}X#2#{}',
+            [2] = 'Decreases by {X:mult,C:white}X#2#{}',
             [3] = 'each hand played',
-            [4] = 'Resets after {X:mult,C:white}X2{}'
+            [4] = 'Resets after {X:mult,C:white}X1{}'
         }
     },
     pos = {
@@ -1279,22 +1279,24 @@ SMODS.Joker{ --Traffic Light
             }
 
         elseif context.after and not context.blueprint then
-            card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
-            if card.ability.extra.Xmult > 2 then
-                card.ability.extra.Xmult = 1
+
+            card.ability.extra.Xmult = card.ability.extra.Xmult - card.ability.extra.Xmult_mod
+
+            if card.ability.extra.Xmult < 1 then
+                card.ability.extra.Xmult = 2
                 return {
-                    message = localize('k_reset'),
-                    colour = G.C.RED
+                    message = "Go!",
+                    colour = G.C.GREEN
                 }
             elseif card.ability.extra.Xmult == 1.5 then
                 return {
-                    message = localize('k_upgrade_ex'),
-                    colour = G.C.FILTER
+                    message = localize{type='variable',key='a_xmult_minus',vars={card.ability.extra.Xmult_mod}},
+                    colour = G.C.RED
                 }
-            elseif card.ability.extra.Xmult == 2 then
+            elseif card.ability.extra.Xmult == 1 then
                 return {
-                    message = localize('k_upgrade_ex'),
-                    colour = G.C.GREEN
+                    message = localize{type='variable',key='a_xmult_minus',vars={card.ability.extra.Xmult_mod}},
+                    colour = G.C.RED
                 }
             end
         end
@@ -1636,7 +1638,7 @@ SMODS.Joker{ --Farmer
         }
     },
     loc_txt = {
-        ['name'] = 'Tuxedo',
+        ['name'] = 'Farmer',
         ['text'] = {
             [1] = 'Cards with {V:1}#2#{} suit',
             [2] = 'held in hand give $#1#',
