@@ -1341,7 +1341,7 @@ SMODS.Joker{ --Hold Your Breath
     cost = 4,
     rarity = 1,
     blueprint_compat = true,
-    eternal_compat = true,
+    eternal_compat = false,
     unlocked = true,
     discovered = true,
     atlas = 'ECjokers',
