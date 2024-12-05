@@ -277,11 +277,13 @@ SMODS.Joker{ --Double Rainbow
             }
         
         elseif context.repetition and context.cardarea == G.hand and context.other_card.ability.name == 'Lucky Card' then
-            return {
-                message = localize('k_again_ex'),
-                repetitions = 1,
-                card = card
-            }
+            if (next(context.card_effects[1]) or #context.card_effects > 1) then
+                return {
+                    message = localize('k_again_ex'),
+                    repetitions = card.ability.extra,
+                    card = card
+                }
+            end
         end
     end
 
@@ -488,7 +490,7 @@ SMODS.Joker{ --Pocket Aces
     config = {
         extra = {
             money = 0,
-            m_gain = 1
+            m_gain = 2
         }
     },
     loc_txt = {
@@ -504,7 +506,7 @@ SMODS.Joker{ --Pocket Aces
         x = 5,
         y = 0
     },
-    cost = 6,
+    cost = 7,
     rarity = 2,
     blueprint_compat = false,
     eternal_compat = true,
@@ -985,16 +987,16 @@ SMODS.Joker{ --Handbook
     key = "handbook",
     config = {
         extra = {
-            mult_mod = 1,
+            mult_mod = 2,
             mult = 0
             }
         },
     loc_txt = {
         ['name'] = 'Handbook',
         ['text'] = {
-            [1] = "This Joker gains {C:mult}+#1# Mult{}",
-            [2] = "if played {C:attention}poker hand{} has {C:attention}not{}",
-            [3] = "already been played this round",
+            [1] = "This Joker gains {C:mult}+#1# Mult{} if played",
+            [2] = "{C:attention}poker hand{} is {C:attention}different{} than",
+            [3] = "hands already played this round",
             [4] = "{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)"
         }
     },
@@ -1002,8 +1004,8 @@ SMODS.Joker{ --Handbook
         x = 3,
         y = 1
     },
-    cost = 5,
-    rarity = 1,
+    cost = 6,
+    rarity = 2,
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = false,
@@ -1017,19 +1019,22 @@ SMODS.Joker{ --Handbook
 
     calculate = function(self, card, context)
 
-    if context.cardarea == G.jokers and context.joker_main then
+    if context.cardarea == G.jokers and context.joker_main and card.ability.extra.mult > 0 then
         return {
             message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
             mult_mod = card.ability.extra.mult
         }
 
     elseif context.cardarea == G.jokers and G.GAME.hands[context.scoring_name] and G.GAME.hands[context.scoring_name].played_this_round == 1 and not context.blueprint and not context.after then 
-            card.ability.extra.mult = card.ability.extra.mult +  card.ability.extra.mult_mod
+        print(tostring(G.GAME.current_round.hands_played))
+        if G.GAME.current_round.hands_played ~= 0 then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
             return{
                 message = localize('k_upgrade_ex'),
                 card = card,
-                colour = G.C.SECONDARY_SET.Planet
-            }               
+                colour = G.C.MULT
+            }            
+            end   
         end
     end
 
@@ -1766,7 +1771,8 @@ SMODS.Joker{ --Clown Car
     config = {
         extra = {
             mult = 44,
-            do_once = true
+            limit = 0,
+            triggers = 0
         }
     },
     loc_txt = {
@@ -1796,13 +1802,18 @@ SMODS.Joker{ --Clown Car
     calculate = function(self, card, context)
 
         if context.before then
-            card.ability.extra.do_once = true
-        elseif context.cardarea == G.play and context.individual and context.other_card == context.scoring_hand[1] and card.ability.extra.do_once then
-            card.ability.extra.do_once = false
+            card.ability.extra.limit = card.ability.extra.limit + 1
+
+        elseif context.cardarea == G.play and context.individual and context.other_card == context.scoring_hand[1] and card.ability.extra.triggers < card.ability.extra.limit then
+            card.ability.extra.triggers = card.ability.extra.triggers + 1
             return{
                 mult = card.ability.extra.mult,
                 card = card
             }
+
+        elseif context.after then
+            card.ability.extra.triggers = 0
+            card.ability.extra.limit = 0
         end
     end
 }
