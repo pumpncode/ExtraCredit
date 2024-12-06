@@ -21,6 +21,7 @@ Art:
 - bishopcorrigan
 - tuzzo
 - R3venantR3mnant
+- Neato
 - CampfireCollective
 
 Concepting:
