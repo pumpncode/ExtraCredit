@@ -117,7 +117,7 @@ SMODS.current_mod.extra_tabs = function() --Credits tab
                 {
                     n = G.UIT.T,
                     config = {
-                    text = "Concepting: CampfireCollective, kittyknight, Audrizzle, Neon, Expelsword, tuzzo, bishopcorrigan, Wingcap,",
+                    text = "Concepting: CampfireCollective, kittyknight, Audrizzle, Neon, Expelsword, tuzzo, bishopcorrigan, Wingcap, AlasBabylon",
                     shadow = false,
                     scale = scale*0.6,
                     colour = G.C.BLACK
@@ -135,7 +135,7 @@ SMODS.current_mod.extra_tabs = function() --Credits tab
                 {
                     n = G.UIT.T,
                     config = {
-                    text = "AlasBabylon, HonuKane, conk reet, Sacto, BioSector, Splatter_Proto, SenrabMJam, Stupid",
+                    text = "HonuKane, conk reet, Sacto, BioSector, Splatter_Proto, SenrabMJam, Stupid, AviolosAvali, Xilande, Sbubby, Seadubbs, Swordodo",
                     shadow = false,
                     scale = scale*0.6,
                     colour = G.C.BLACK
@@ -1485,7 +1485,7 @@ SMODS.Joker{ --Werewolf
     },
     cost = 5,
     rarity = 2,
-    blueprint_compat = true,
+    blueprint_compat = false,
     eternal_compat = true,
     unlocked = true,
     discovered = true,
@@ -1824,7 +1824,7 @@ SMODS.Joker{ --Ship of Theseus
     config = {
         extra = {
             Xmult = 1,
-            Xmult_mod = 0.5
+            Xmult_mod = 0.4
         }
     },
     loc_txt = {
@@ -1958,7 +1958,7 @@ SMODS.Joker{ --Accretion Disk
     end,
 
     calculate = function(self, card, context)
-        if context.using_consumeable and not context.blueprint then
+        if context.using_consumeable then
             if context.consumeable.ability.set == 'Planet' then
                 card.ability.extra.used = card.ability.extra.used + 1
                 if card.ability.extra.used >= 3 then
@@ -2002,7 +2002,7 @@ SMODS.Joker{ --Go Fish
         y = 2
     },
     cost = 5,
-    rarity = 1,
+    rarity = 2,
     blueprint_compat = false,
     eternal_compat = true,
     unlocked = true,
