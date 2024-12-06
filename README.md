@@ -3,10 +3,15 @@ Extra Credit!
 A small-scale vanilla-style content mod for Balatro University
 
 Features:
-- 15 jokers with new effects and art :)
+- 30 jokers with new effects and art :)
+
+Project Lead:
+- CampfireCollective
 
 Programming:
 - CampfireCollective
+- Stupid
+- MathIsFun_
 
 Art:
 - kittyknight
@@ -14,6 +19,9 @@ Art:
 - Wingcap
 - HonuKane
 - bishopcorrigan
+- tuzzo
+- R3venantR3mnant
+- Neato
 - CampfireCollective
 
 Concepting:
@@ -27,12 +35,24 @@ Concepting:
 - Wingcap
 - AlasBabylon
 - HonuKane
+- conk reet
+- Sacto
+- BioSector
+- Splatter_Proto
+- SenrabMJam
+- Stupid
+- AviolosAvali
+- Xilande
+- Sbubby
+- Seadubbs
+- Swordodo
 
 Special thanks:
+- Drspectred
 - Djynasty
-- Stupid
 - InertSteak
 - Akai
+- localthunk
 
 
 If you're supposed to be on this list somewhere and aren't, please reach out to me on discord! My username is campfirecollective
