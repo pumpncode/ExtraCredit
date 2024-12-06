@@ -63,7 +63,7 @@ SMODS.current_mod.extra_tabs = function() --Credits tab
                     {
                     n = G.UIT.T,
                     config = {
-                        text = "Honukane, bishopcorrigan, tuzzo, R3venantR3mnant",
+                        text = "Honukane, bishopcorrigan, tuzzo, R3venantR3mnant, Neato",
                         shadow = false,
                         scale = scale,
                         colour = G.C.MONEY
@@ -1497,7 +1497,7 @@ SMODS.Joker{ --Werewolf
     end,
 
     calculate = function(self, card, context)
-        if context.before then
+        if context.before and not context.blueprint then
             local thunk = 0
             for k, v in ipairs(context.full_hand) do
                 if v.ability.set ~= 'Enhanced' and not contains(context.scoring_hand, v) then
@@ -1675,7 +1675,7 @@ SMODS.Joker{ --Farmer
     end,
 
     calculate = function(self, card, context)
-        if context.cardarea == G.hand and context.end_of_round and context.individual and not context.repetition and context.other_card:is_suit(G.GAME.current_round.farmer_card.suit) then
+        if context.cardarea == G.hand and context.end_of_round and context.individual and not context.repetition and context.other_card:is_suit(G.GAME.current_round.farmer_card.suit) and not context.blueprint then
             delay(0.4)
             ease_dollars(3)
             return {
