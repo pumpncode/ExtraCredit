@@ -40,6 +40,11 @@ Concepting:
 - Splatter_Proto
 - SenrabMJam
 - Stupid
+- AviolosAvali
+- Xilande
+- Sbubby
+- Seadubbs
+- Swordodo
 
 Special thanks:
 - Drspectred
