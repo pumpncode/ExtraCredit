@@ -1822,7 +1822,8 @@ SMODS.Joker{ --Ship of Theseus
     config = {
         extra = {
             Xmult = 1,
-            Xmult_mod = 0.4
+            Xmult_mod = 0.4,
+            tick = false
         }
     },
     loc_txt = {
@@ -1853,9 +1854,11 @@ SMODS.Joker{ --Ship of Theseus
 
     calculate = function(self, card, context)
         if context.cards_destroyed then
+            card.ability.extra.tick = false
             for k, val in ipairs(context.glass_shattered) do
                 if not context.blueprint then
                     card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
+                    card.ability.extra.tick = true
                 end
             
                 G.E_MANAGER:add_event(Event({
@@ -1876,17 +1879,18 @@ SMODS.Joker{ --Ship of Theseus
                 card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_copied_ex'), colour = G.C.FILTER})
 
             end
-            if not context.blueprint then
+            if not context.blueprint and card.ability.extra.tick then
                 delay(0.5)
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}}, colour = G.C.RED})
             end
 
 
         elseif context.remove_playing_cards then
-            
+            card.ability.extra.tick = false
             for k, val in ipairs(context.removed) do
                 if not context.blueprint then
                     card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
+                    card.ability.extra.tick = true
                 end
             
                 G.E_MANAGER:add_event(Event({
@@ -1907,7 +1911,7 @@ SMODS.Joker{ --Ship of Theseus
                 card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_copied_ex'), colour = G.C.FILTER})
 
             end
-            if not context.blueprint then
+            if not context.blueprint and card.ability.extra.tick then
                 delay(0.5)
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}}, colour = G.C.RED})
             end
