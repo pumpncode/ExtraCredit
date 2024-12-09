@@ -1156,8 +1156,8 @@ SMODS.Joker{ --Espresso
     key = "espresso",
     config = {
         extra = {
-            money = 40,
-            m_loss = 10
+            money = 30,
+            m_loss = 5
         }
     },
     loc_txt = {
@@ -1321,8 +1321,8 @@ SMODS.Joker{ --Hold Your Breath
     config = {
         extra = {
             chips = 0,
-            chip_mod = 20,
-            chip_limit = 120
+            chip_mod = 30,
+            chip_limit = 180
         }
     },
     loc_txt = {
@@ -1402,7 +1402,7 @@ SMODS.Joker{ --Ouppy Bog
     config = {
         extra = {
             mult = 0,
-            mult_mod = 2
+            mult_mod = 3
         }
     },
     loc_txt = {
@@ -1475,8 +1475,7 @@ SMODS.Joker{ --Werewolf
         ['name'] = 'Werewolf',
         ['text'] = {
             [1] = 'Played cards that are',
-            [2] = '{C:attention}unscored{} and {C:attention}not',
-            [3] = '{C:attention}enhanced{} become {C:attention}Wild Cards'
+            [2] = '{C:attention}enhanced{} become {C:attention}Wild Cards'
         }
     },
     pos = {
@@ -1500,7 +1499,7 @@ SMODS.Joker{ --Werewolf
         if context.before and not context.blueprint then
             local thunk = 0
             for k, v in ipairs(context.full_hand) do
-                if v.ability.set ~= 'Enhanced' and not contains(context.scoring_hand, v) then
+                if v.ability.set == 'Enhanced' and v.ability.name ~= "Wild Card" then
                     thunk = thunk + 1
                     v:set_ability(G.P_CENTERS.m_wild, nil, true)
                     G.E_MANAGER:add_event(Event({
@@ -1645,8 +1644,7 @@ SMODS.Joker{ --Farmer
     key = "farmer",
     config = {
         extra = {
-            reps = 1,
-            dollars = 3
+            dollars = 2
         }
     },
     loc_txt = {
@@ -1698,7 +1696,7 @@ SMODS.Joker{ --Ambrosia
     loc_txt = {
         ['name'] = 'Ambrosia',
         ['text'] = {
-            [1] = '{C:attention}Fill{} consumeable slots with',
+            [1] = '{C:attention}Fill{} consumable slots with',
             [2] = '{C:spectral}Spectral Cards{} whenever a',
             [3] = '{C:attention}blind{} is {C:attention}skipped{}, destroyed',
             [4] = 'when any {C:spectral}Spectral Card{} is {C:attention}sold',
