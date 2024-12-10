@@ -11,9 +11,6 @@
 	"badge_text_colour": "FBA105",
 	"version": "1.1.0",
 	"dependencies": [
-		{
-			"id": "Steamodded",
-			"min_version": "1.0.0~ALPHA-1030e"
-		}
+		"Steamodded (>=1.0.0~ALPHA-1206c)"
 	]
 }
