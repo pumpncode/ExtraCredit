@@ -212,7 +212,7 @@ SMODS.Joker{ --Forklift
         x = 0,
         y = 0
     },
-    cost = 4,
+    cost = 5,
     rarity = 2,
     blueprint_compat = false,
     eternal_compat = true,
@@ -690,7 +690,7 @@ SMODS.Joker{ --Compost
         x = 8,
         y = 0
     },
-    cost = 4,
+    cost = 5,
     rarity = 1,
     blueprint_compat = true,
     eternal_compat = false,
@@ -896,7 +896,7 @@ SMODS.Joker{ --Turtle
         x = 1,
         y = 1
     },
-    cost = 4,
+    cost = 6,
     rarity = 2,
     blueprint_compat = true,
     eternal_compat = true,
@@ -987,25 +987,25 @@ SMODS.Joker{ --Handbook
     key = "handbook",
     config = {
         extra = {
-            mult_mod = 2,
-            mult = 0
+            chip_mod = 5,
+            chips = 0
             }
         },
     loc_txt = {
         ['name'] = 'Handbook',
         ['text'] = {
-            [1] = "This Joker gains {C:mult}+#1# Mult{} if played",
-            [2] = "{C:attention}poker hand{} is {C:attention}different{} than",
-            [3] = "hands already played this round",
-            [4] = "{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)"
+            [1] = "This Joker gains {C:blue}+#1#{} Chips if played",
+            [2] = "{C:attention}poker hand{} has {C:attention}not{}",
+            [3] = "already been played this round",
+            [4] = "{C:inactive}(Currently {C:blue}+#2#{C:inactive} Chips)"
         }
     },
     pos = {
         x = 3,
         y = 1
     },
-    cost = 6,
-    rarity = 2,
+    cost = 5,
+    rarity = 1,
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = false,
@@ -1014,27 +1014,24 @@ SMODS.Joker{ --Handbook
     atlas = 'ECjokers',
 
     loc_vars = function(self, info_queue, card)
-        return {vars = {card.ability.extra.mult_mod, card.ability.extra.mult}}
+        return {vars = {card.ability.extra.chip_mod, card.ability.extra.chips}}
     end,
 
     calculate = function(self, card, context)
 
-    if context.cardarea == G.jokers and context.joker_main and card.ability.extra.mult > 0 then
+    if context.cardarea == G.jokers and context.joker_main and card.ability.extra.chips > 0 then
         return {
-            message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
-            mult_mod = card.ability.extra.mult
+            message = localize{type='variable',key='a_chips',vars={card.ability.extra.chips}},
+            chip_mod = card.ability.extra.chips
         }
 
     elseif context.cardarea == G.jokers and G.GAME.hands[context.scoring_name] and G.GAME.hands[context.scoring_name].played_this_round == 1 and not context.blueprint and not context.after then 
-        print(tostring(G.GAME.current_round.hands_played))
-        if G.GAME.current_round.hands_played ~= 0 then
-            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+            card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
             return{
                 message = localize('k_upgrade_ex'),
                 card = card,
-                colour = G.C.MULT
-            }            
-            end   
+                colour = G.C.CHIPS
+            }             
         end
     end
 
@@ -1172,7 +1169,7 @@ SMODS.Joker{ --Espresso
         x = 6,
         y = 1
     },
-    cost = 5,
+    cost = 2,
     rarity = 1,
     blueprint_compat = false,
     eternal_compat = false,
@@ -1675,9 +1672,9 @@ SMODS.Joker{ --Farmer
     calculate = function(self, card, context)
         if context.cardarea == G.hand and context.end_of_round and context.individual and not context.repetition and context.other_card:is_suit(G.GAME.current_round.farmer_card.suit) and not context.blueprint then
             delay(0.4)
-            ease_dollars(3)
+            ease_dollars(2)
             return {
-                dollars = 3,
+                dollars = 2,
                 card = context.other_card
             }
         end        
