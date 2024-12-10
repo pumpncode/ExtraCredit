@@ -5,7 +5,7 @@
 	"author": ["CampfireCollective"],
 	"description": "A small-scale vanilla-style content mod for Balatro University! Check out the Interns tab!",
 	"prefix": "ExtraCredit",
-	"main_file": "essay.lua",
+	"main_file": "src/essay.lua",
 	"priority": 1,
 	"badge_colour": "006A00",
 	"badge_text_colour": "FBA105",

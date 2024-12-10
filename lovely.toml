@@ -12,11 +12,11 @@ priority = 0
 [patches.pattern]
 target = "card.lua"
 pattern = '''
-                    bonus_chips = (self.ability.bonus + (self.ability.perma_bonus or 0)) > 0 and (self.ability.bonus + (self.ability.perma_bonus or 0)) or nil,
+bonus_chips = (self.ability.bonus + (self.ability.perma_bonus or 0)) > 0 and (self.ability.bonus + (self.ability.perma_bonus or 0)) or nil,
 '''
 position = "at"
 payload = '''
-                    bonus_chips = (self.ability.bonus + (self.ability.perma_bonus or 0)) ~= 0 and (self.ability.bonus + (self.ability.perma_bonus or 0)) or nil,
+bonus_chips = (self.ability.bonus + (self.ability.perma_bonus or 0)) ~= 0 and (self.ability.bonus + (self.ability.perma_bonus or 0)) or nil,
 '''
 match_indent = true
 
@@ -48,9 +48,9 @@ match_indent = true
 target = "functions/state_events.lua"
 pattern = '''
 reset_idol_card()
-                        reset_mail_rank()
-                        reset_ancient_card()
-                        reset_castle_card()
+reset_mail_rank()
+reset_ancient_card()
+reset_castle_card()
 '''
 position = "after"
 payload = '''
@@ -65,9 +65,9 @@ match_indent = true
 target = "game.lua"
 pattern = '''
 reset_idol_card()
-        reset_mail_rank()
-        self.GAME.current_round.ancient_card.suit = nil
-        reset_ancient_card()
+reset_mail_rank()
+self.GAME.current_round.ancient_card.suit = nil
+reset_ancient_card()
 '''
 position = "after"
 payload = '''
@@ -85,8 +85,8 @@ match_indent = true
 target = "game.lua"
 pattern = '''
 idol_card = {suit = 'Spades', rank = 'Ace'},
-            mail_card = {rank = 'Ace'},
-            ancient_card = {suit = 'Spades'},
+mail_card = {rank = 'Ace'},
+ancient_card = {suit = 'Spades'},
 '''
 position = "after"
 payload = '''
