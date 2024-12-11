@@ -1759,16 +1759,13 @@ SMODS.Joker{ --Clown Car
     config = {
         extra = {
             mult = 44,
-            limit = 0,
-            triggers = 0
         }
     },
     loc_txt = {
         ['name'] = 'Clown Car',
         ['text'] = {
-            [1] = '{C:attention}First played card{} gives',
-            [2] = '{C:mult}+#1#{} Mult the {C:attention}first{} time',
-            [3] = 'that it {C:attention}scores'
+            [1] = '{C:mult}+#1#{} Mult {C:attention}before{}',
+            [2] = 'cards are scored'
         }
     },
     pos = {
@@ -1788,20 +1785,11 @@ SMODS.Joker{ --Clown Car
     end,
 
     calculate = function(self, card, context)
-
         if context.before then
-            card.ability.extra.limit = card.ability.extra.limit + 1
-
-        elseif context.cardarea == G.play and context.individual and context.other_card == context.scoring_hand[1] and card.ability.extra.triggers < card.ability.extra.limit then
-            card.ability.extra.triggers = card.ability.extra.triggers + 1
-            return{
-                mult = card.ability.extra.mult,
-                card = card
-            }
-
-        elseif context.after then
-            card.ability.extra.triggers = 0
-            card.ability.extra.limit = 0
+            --Manually give +44 Mult
+            mult = mod_mult(mult + card.ability.extra.mult)
+            update_hand_text({delay = 0}, {mult = mult})
+            card_eval_status_text(card, 'jokers', nil, percent, nil, {message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}}, mult_mod = card.ability.extra.mult})
         end
     end
 }
