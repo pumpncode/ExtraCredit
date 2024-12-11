@@ -2,7 +2,6 @@ local mod = SMODS.current_mod
 SMODS.Atlas({key = "ECjokers", path = "ECjokers.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 
 ECconfig = SMODS.current_mod.config
-mod_path = ""..SMODS.current_mod.path
 
 SMODS.current_mod.extra_tabs = function() --Credits tab
     local scale = 0.5
@@ -162,17 +161,11 @@ SMODS.current_mod.config_tab = function() --Config tab
             label = "Page 1 Jokers (restart required)",
             ref_table = ECconfig,
             ref_value = "wave1",
-            callback = function(_set_toggle)
-                NFS.write(mod_path.."/config.lua", STR_PACK(ECconfig))
-            end,
         }),
         create_toggle({
             label = "Page 2 Jokers (restart required)",
             ref_table = ECconfig,
             ref_value = "wave2",
-            callback = function(_set_toggle)
-                NFS.write(mod_path.."/config.lua", STR_PACK(ECconfig))
-            end,
         }),
       },
     }
