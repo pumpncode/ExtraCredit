@@ -1544,7 +1544,7 @@ SMODS.Joker{ --Prideful Joker
     name = "Prideful Joker",
     key = "pridefuljoker",
     config = {
-        extra = 15
+        extra = 18
     },
     loc_txt = {
         ['name'] = 'Prideful Joker',
@@ -1765,13 +1765,14 @@ SMODS.Joker{ --Clown Car
     config = {
         extra = {
             mult = 44,
+            money = 2
         }
     },
     loc_txt = {
         ['name'] = 'Clown Car',
         ['text'] = {
-            [1] = '{C:mult}+#1#{} Mult {C:attention}before{}',
-            [2] = 'cards are scored'
+            [1] = '{C:mult}+#1#{} Mult and {C:money}-$#2#',
+            [2] = '{C:attention}before{} cards are scored'
         }
     },
     pos = {
@@ -1787,11 +1788,13 @@ SMODS.Joker{ --Clown Car
     atlas = 'ECjokers',
 
     loc_vars = function(self, info_queue, card)
-        return {vars = {card.ability.extra.mult}}
+        return {vars = {card.ability.extra.mult, card.ability.extra.money}}
     end,
 
     calculate = function(self, card, context)
         if context.before then
+            ease_dollars(-card.ability.extra.money)
+            card_eval_status_text(card, 'jokers', nil, percent, nil, {message = "-$"..tostring(card.ability.extra.money), colour = G.C.MONEY})
             --Manually give +44 Mult
             mult = mod_mult(mult + card.ability.extra.mult)
             update_hand_text({delay = 0}, {mult = mult})
