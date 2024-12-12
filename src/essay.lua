@@ -440,13 +440,10 @@ SMODS.Joker{ --Rubber Ducky
             card.ability.extra.min_bonus = 0
             context.other_card.ability.perma_bonus = context.other_card.ability.perma_bonus or 0
             if context.other_card.ability.name == 'Stone Card' then
-                print("stone")
                 card.ability.extra.min_bonus = 50 * -1
             elseif context.other_card.ability.name == 'Bonus' then
-                print("bonus")
                 card.ability.extra.min_bonus = (30 + context.other_card.base.nominal) * -1
             else
-                print("some other bitch")
                 card.ability.extra.min_bonus = context.other_card.base.nominal * -1
             end
             
