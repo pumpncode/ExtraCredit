@@ -518,7 +518,7 @@ SMODS.Joker{ --Pocket Aces
     end,
 
     calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play and context.other_card:get_id() == 14 then
+        if context.individual and context.cardarea == G.play and context.other_card:get_id() == 14 and not context.blueprint then
             card.ability.extra.money = card.ability.extra.money + card.ability.extra.m_gain
         end
     end
@@ -758,7 +758,7 @@ SMODS.Joker{ --Candy Necklace
         ['name'] = 'Candy Necklace',
         ['text'] = {
             [1] = 'Gain a random {C:attention}Booster Pack Tag{}',
-            [2] = 'at the end of each round',
+            [2] = 'at the end of the {C:attention}shop',
             [3] = '{C:inactive}({}{C:attention}#1#{}{C:inactive} remaining)'
         }
     },
@@ -768,7 +768,7 @@ SMODS.Joker{ --Candy Necklace
     },
     cost = 8,
     rarity = 2,
-    blueprint_compat = false,
+    blueprint_compat = true,
     eternal_compat = false,
     unlocked = true,
     discovered = true,
@@ -784,8 +784,7 @@ SMODS.Joker{ --Candy Necklace
     end,
 
     calculate = function(self, card, context)
-        if context.end_of_round and not context.repetition and not context.individual then
-
+        if context.ending_shop then
             G.E_MANAGER:add_event(Event({
                 func = (function()
                     add_tag(Tag(pseudorandom_element(card.ability.extra.flavours, pseudoseed('candy'))))
@@ -814,10 +813,11 @@ SMODS.Joker{ --Candy Necklace
                             return true
                         end
                     })) 
-                    return {
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {
                         message = localize('k_eaten_ex'),
-                        colour = G.C.PURPLE
-                    }
+                            colour = G.C.PURPLE,
+                        card = card
+                    }) 
                 end
             end
         end
@@ -1086,7 +1086,7 @@ SMODS.Joker{ --Monte Haul
         ['name'] = 'Monte Haul',
         ['text'] = {
             [1] = "After {C:attention}1{} round, sell this card",
-            [2] = "to gain a random {C:attention}Joker Tag",
+            [2] = "to gain {C:attention}2{} random {C:attention}Joker Tags",
             [3] = "{C:inactive}(Currently {C:attention}#1#{C:inactive}/1)"
 
         }
@@ -1126,14 +1126,16 @@ SMODS.Joker{ --Monte Haul
             end
 
         elseif context.selling_self and card.ability.extra.monty_rounds >= 1 then
-            G.E_MANAGER:add_event(Event({
-                func = (function()
-                    add_tag(Tag(pseudorandom_element(card.ability.extra.flavours, pseudoseed('monty'))))
-                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
-                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
-                    return true
-                end)
-            }))
+            for i=1, 2 do
+                G.E_MANAGER:add_event(Event({
+                    func = (function()
+                        add_tag(Tag(pseudorandom_element(card.ability.extra.flavours, pseudoseed('monty'))))
+                        play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+                        play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                        return true
+                    end)
+                }))
+            end
         end
     end
 }
@@ -1389,15 +1391,15 @@ SMODS.Joker{ --Ouppy Bog
     config = {
         extra = {
             mult = 0,
-            mult_mod = 3
+            mult_mod = 4
         }
     },
     loc_txt = {
         ['name'] = 'Toby the Corgi',
         ['text'] = {
-            [1] = '{C:attention}Destroys{} all held {C:attention}consumables',
-            [2] = 'when {C:attention}Blind{} is selected',
-            [3] = 'Gains {C:mult}+#2#{} Mult for each destroyed',
+            [1] = '{C:attention}Destroys{} a random {C:attention}consumable',
+            [2] = 'then gains {C:mult}+#2#{} Mult',
+            [3] = 'when {C:attention}Blind{} is selected',
             [4] = '{C:inactive}(Currently {C:mult}+#1# {C:inactive}Mult)'
         }
     },
@@ -1425,26 +1427,26 @@ SMODS.Joker{ --Ouppy Bog
                 mult_mod = card.ability.extra.mult
             }
 
-        elseif context.setting_blind and not card.getting_sliced and not context.blueprint and #G.consumeables.cards >= 1 then
-            for i=1, #G.consumeables.cards do
-                if G.consumeables.cards[i] ~= nil then
-                    card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            play_sound('tarot1')
-                            G.consumeables.cards[i].T.r = -0.2
-                            G.consumeables.cards[i]:juice_up(0.3, 0.4)
-                            G.consumeables.cards[i].states.drag.is = true
-                            G.consumeables.cards[i].children.center.pinch.x = true
-                            G.consumeables.cards[i]:start_dissolve()
-                            delay(0.6)
-                            return true
-                        end
-                    }))
-                
-                end
+        elseif context.setting_blind and not card.getting_sliced and not context.blueprint and G.consumeables.cards[1] then
+            
+            local snack = pseudorandom_element(G.consumeables.cards, pseudoseed('toby'))
+            if snack ~= nil then
+                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        play_sound('tarot1')
+                        snack.T.r = -0.2
+                        snack:juice_up(0.3, 0.4)
+                        snack.states.drag.is = true
+                        snack.children.center.pinch.x = true
+                        snack:start_dissolve()
+                        snack = nil
+                        delay(0.3)
+                        return true
+                    end
+                }))
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},colour = G.C.MULT})
             end
-            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}}})
         end
     end
 }
@@ -1517,25 +1519,23 @@ SMODS.Joker{ --Permanent Marker
     loc_txt = {
         ['name'] = 'Permanent Marker',
         ['text'] = {
-            [1] = '{C:attention}Wild Cards{} can\'t',
-            [2] = 'be debuffed'
+            [1] = '{C:attention}Enhanced{} cards',
+            [2] = 'can\'t be debuffed'
         }
     },
     pos = {
         x = 2,
         y = 2
     },
-    cost = 3,
+    cost = 4,
     rarity = 1,
     blueprint_compat = false,
     eternal_compat = true,
-    enhancement_gate = 'm_wild',
     unlocked = true,
     discovered = true,
     atlas = 'ECjokers',
 
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = G.P_CENTERS.m_wild
         return {vars = {}}
     end
 }
@@ -1544,7 +1544,7 @@ SMODS.Joker{ --Prideful Joker
     name = "Prideful Joker",
     key = "pridefuljoker",
     config = {
-        extra = 12
+        extra = 18
     },
     loc_txt = {
         ['name'] = 'Prideful Joker',
@@ -1592,7 +1592,7 @@ SMODS.Joker{ --Tuxedo
     loc_txt = {
         ['name'] = 'Tuxedo',
         ['text'] = {
-            [1] = '{C:attention}Retrigger{} played cards',
+            [1] = '{C:attention}Retrigger{} all cards',
             [2] = 'with {V:1}#1#{} suit',
             [3] = "{s:0.8}suit changes at end of round"
         }
@@ -1601,7 +1601,7 @@ SMODS.Joker{ --Tuxedo
         x = 4,
         y = 2
     },
-    cost = 6,
+    cost = 5,
     rarity = 2,
     blueprint_compat = true,
     eternal_compat = true,
@@ -1622,6 +1622,15 @@ SMODS.Joker{ --Tuxedo
                 repetitions = card.ability.extra.reps,
                 card = card
             }
+
+        elseif context.repetition and context.cardarea == G.hand and context.other_card:is_suit(G.GAME.current_round.tuxedo_card.suit) then
+            if (next(context.card_effects[1]) or #context.card_effects > 1) then
+                return {
+                    message = localize('k_again_ex'),
+                    repetitions = card.ability.extra.reps,
+                    card = card
+                }
+            end
         end
     end
 }
@@ -1756,13 +1765,14 @@ SMODS.Joker{ --Clown Car
     config = {
         extra = {
             mult = 44,
+            money = 2
         }
     },
     loc_txt = {
         ['name'] = 'Clown Car',
         ['text'] = {
-            [1] = '{C:mult}+#1#{} Mult {C:attention}before{}',
-            [2] = 'cards are scored'
+            [1] = '{C:mult}+#1#{} Mult and {C:money}-$#2#',
+            [2] = '{C:attention}before{} cards are scored'
         }
     },
     pos = {
@@ -1778,11 +1788,13 @@ SMODS.Joker{ --Clown Car
     atlas = 'ECjokers',
 
     loc_vars = function(self, info_queue, card)
-        return {vars = {card.ability.extra.mult}}
+        return {vars = {card.ability.extra.mult, card.ability.extra.money}}
     end,
 
     calculate = function(self, card, context)
         if context.before then
+            ease_dollars(-card.ability.extra.money)
+            card_eval_status_text(card, 'jokers', nil, percent, nil, {message = "-$"..tostring(card.ability.extra.money), colour = G.C.MONEY})
             --Manually give +44 Mult
             mult = mod_mult(mult + card.ability.extra.mult)
             update_hand_text({delay = 0}, {mult = mult})
@@ -1835,25 +1847,24 @@ SMODS.Joker{ --Ship of Theseus
                     card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
                     card.ability.extra.tick = true
                 end
-            
-                G.E_MANAGER:add_event(Event({
-                func = function() 
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                     local card = copy_card(val, nil, nil, G.playing_card)
-                    card:start_materialize()
                     card:add_to_deck()
+                    G.deck.config.card_limit = G.deck.config.card_limit + 1
                     G.deck:emplace(card)
                     table.insert(G.playing_cards, card)
-                    return true
-                end}))
+                    playing_card_joker_effects({true})
+                
                 G.E_MANAGER:add_event(Event({
                 func = function() 
-                    G.deck.config.card_limit = G.deck.config.card_limit + 1
+                    card:start_materialize()
+                    
                     return true
                 end}))
+            end
                 card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_copied_ex'), colour = G.C.FILTER})
 
-            end
+            
             if not context.blueprint and card.ability.extra.tick then
                 delay(0.5)
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}}, colour = G.C.RED})
@@ -1866,26 +1877,25 @@ SMODS.Joker{ --Ship of Theseus
                 if not context.blueprint then
                     card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
                     card.ability.extra.tick = true
-                end
-            
-                G.E_MANAGER:add_event(Event({
-                func = function() 
+                end                
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                     local card = copy_card(val, nil, nil, G.playing_card)
-                    card:start_materialize()
                     card:add_to_deck()
+                    G.deck.config.card_limit = G.deck.config.card_limit + 1
                     G.deck:emplace(card)
                     table.insert(G.playing_cards, card)
-                    return true
-                end}))
+                    playing_card_joker_effects({true})
+                
                 G.E_MANAGER:add_event(Event({
                 func = function() 
-                    G.deck.config.card_limit = G.deck.config.card_limit + 1
+                    card:start_materialize()
+                    
                     return true
                 end}))
+            end
                 card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_copied_ex'), colour = G.C.FILTER})
 
-            end
+            
             if not context.blueprint and card.ability.extra.tick then
                 delay(0.5)
                 card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}}, colour = G.C.RED})
@@ -1978,7 +1988,7 @@ SMODS.Joker{ --Go Fish
         x = 9,
         y = 2
     },
-    cost = 5,
+    cost = 6,
     rarity = 2,
     blueprint_compat = false,
     eternal_compat = true,
@@ -2008,12 +2018,14 @@ SMODS.Joker{ --Go Fish
             end
 
         elseif context.destroying_card and not context.blueprint then
-            return contains(card.ability.extra.fish, context.destroying_card)
-        
+            return contains(card.ability.extra.fish, context.destroying_card)        
 
         elseif context.after and not context.blueprint then
             card.ability.extra.fish = nil
-        end 
+
+        elseif context.end_of_round then
+            card.ability.extra.fished = true
+        end
     end
 }
 end
