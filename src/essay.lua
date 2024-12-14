@@ -1848,26 +1848,27 @@ SMODS.Joker{ --Ship of Theseus
                     card.ability.extra.tick = true
                 end
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                    local card = copy_card(val, nil, nil, G.playing_card)
-                    card:add_to_deck()
+                    local _card = copy_card(val, nil, nil, G.playing_card)
+                    _card:add_to_deck()
                     G.deck.config.card_limit = G.deck.config.card_limit + 1
-                    G.deck:emplace(card)
-                    table.insert(G.playing_cards, card)
+                    G.deck:emplace(_card)
+                    table.insert(G.playing_cards, _card)
                     playing_card_joker_effects({true})
                 
                 G.E_MANAGER:add_event(Event({
                 func = function() 
-                    card:start_materialize()
+                    _card:start_materialize()
                     
                     return true
                 end}))
-            end
                 card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_copied_ex'), colour = G.C.FILTER})
+            end
+                
 
             
             if not context.blueprint and card.ability.extra.tick then
                 delay(0.5)
-                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}}, colour = G.C.RED})
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}}, colour = G.C.FILTER})
             end
 
 
@@ -1879,26 +1880,27 @@ SMODS.Joker{ --Ship of Theseus
                     card.ability.extra.tick = true
                 end                
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                    local card = copy_card(val, nil, nil, G.playing_card)
+                    local _card = copy_card(val, nil, nil, G.playing_card)
                     card:add_to_deck()
                     G.deck.config.card_limit = G.deck.config.card_limit + 1
-                    G.deck:emplace(card)
-                    table.insert(G.playing_cards, card)
+                    G.deck:emplace(_card)
+                    table.insert(G.playing_cards, _card)
                     playing_card_joker_effects({true})
                 
                 G.E_MANAGER:add_event(Event({
                 func = function() 
-                    card:start_materialize()
+                    _card:start_materialize()
                     
                     return true
                 end}))
-            end
                 card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_copied_ex'), colour = G.C.FILTER})
+            end
+                
 
             
             if not context.blueprint and card.ability.extra.tick then
                 delay(0.5)
-                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}}, colour = G.C.RED})
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}}, colour = G.C.FILTER})
             end
 
         elseif context.cardarea == G.jokers and context.joker_main and card.ability.extra.Xmult > 1 then
