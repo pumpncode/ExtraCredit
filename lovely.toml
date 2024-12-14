@@ -22,6 +22,10 @@ match_indent = true
 
 
 
+
+
+
+
 #Debuff functionality
 [[patches]]
 [patches.pattern]
@@ -37,7 +41,7 @@ end
 '''
 position = "after"
 payload = '''
-if next(find_joker("Permanent Marker")) and self.ability.name == "Wild Card" then should_debuff = false end
+if next(find_joker("Permanent Marker")) and self.ability.set == "Enhanced" then should_debuff = false end
 '''
 match_indent = true
 
