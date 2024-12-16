@@ -1792,7 +1792,7 @@ SMODS.Joker{ --Clown Car
     end,
 
     calculate = function(self, card, context)
-        if context.before then
+        if context.before_but_not_as_much then
             ease_dollars(-card.ability.extra.money)
             card_eval_status_text(card, 'jokers', nil, percent, nil, {message = "-$"..tostring(card.ability.extra.money), colour = G.C.MONEY})
             --Manually give +44 Mult
@@ -1802,6 +1802,7 @@ SMODS.Joker{ --Clown Car
         end
     end
 }
+_RELEASE_MODE = false
 
 SMODS.Joker{ --Ship of Theseus
     name = "Ship of Theseus",
