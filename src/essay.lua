@@ -1794,11 +1794,11 @@ SMODS.Joker{ --Clown Car
     calculate = function(self, card, context)
         if context.before_but_not_as_much then
             ease_dollars(-card.ability.extra.money)
-            card_eval_status_text(card, 'jokers', nil, percent, nil, {message = "-$"..tostring(card.ability.extra.money), colour = G.C.MONEY})
+            card_eval_status_text(context.blueprint_card or card, 'jokers', nil, percent, nil, {message = "-$"..tostring(card.ability.extra.money), colour = G.C.MONEY})
             --Manually give +44 Mult
             mult = mod_mult(mult + card.ability.extra.mult)
             update_hand_text({delay = 0}, {mult = mult})
-            card_eval_status_text(card, 'jokers', nil, percent, nil, {message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}}, mult_mod = card.ability.extra.mult})
+            card_eval_status_text(context.blueprint_card or card, 'jokers', nil, percent, nil, {message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}}, mult_mod = card.ability.extra.mult})
         end
     end
 }
