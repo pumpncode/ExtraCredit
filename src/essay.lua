@@ -2469,10 +2469,8 @@ SMODS.Joker{ --Hoarder
     loc_txt = {
         ['name'] = 'Hoarder',
         ['text'] = {
-            [1] = "Create a Tarot and Planet",
-            [2] = "card at end of round if",
-            [3] = "remaining Hands are equal",
-            [4] = "to remaining Discards"
+            [1] = "This Joker gains {C:money}$#1#{} of sell value",
+            [2] = "whenever money is earned"
         }
     },
     pos = {
@@ -2488,18 +2486,21 @@ SMODS.Joker{ --Hoarder
     atlas = 'ECjokers',
 
     loc_vars = function(self, info_queue, card)
-        return {vars = {}}
+        return {vars = {card.ability.extra}}
     end,
 
     calculate = function(self, card, context)
         if context.EC_ease_dollars and not context.blueprint then
-            card.ability.extra_value = card.ability.extra_value + card.ability.extra
-            card:set_cost()
-            card_eval_status_text(card, 'extra', nil, nil, nil, {
-                message = localize('k_val_up'),
-                    colour = G.C.MONEY,
-                card = card
-            }) 
+            if context.EC_ease_dollars > 0 then
+                card.ability.extra_value = card.ability.extra_value + card.ability.extra
+                card:set_cost()
+                card_eval_status_text(card, 'extra', nil, nil, nil, {
+                    message = localize('k_val_up'),
+                        colour = G.C.MONEY,
+                    card = card
+                }) 
+            end
+            
         end
     end
 }
@@ -2595,6 +2596,7 @@ SMODS.Joker{ --Joka Lisa
     rarity = 3,
     blueprint_compat = true,
     eternal_compat = true,
+    perishable_compat = false,
     unlocked = true,
     discovered = true,
     atlas = 'ECjokers',
