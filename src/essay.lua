@@ -2710,8 +2710,8 @@ SMODS.Joker{ --Passport
         x = 3,
         y = 4
     },
-    cost = 7,
-    rarity = 3,
+    cost = 5,
+    rarity = 1,
     blueprint_compat = false,
     eternal_compat = true,
     unlocked = true,
