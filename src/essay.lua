@@ -134,7 +134,7 @@ SMODS.current_mod.extra_tabs = function() --Credits tab
                 {
                     n = G.UIT.T,
                     config = {
-                    text = "HonuKane, conk reet, Sacto, BioSector, Splatter_Proto, SenrabMJam, Stupid, AviolosAvali, Xilande, Sbubby, Seadubbs, Swordodo",
+                    text = "HonuKane, conk reet, Sacto, BioSector, Splatter_Proto, SenrabMJam, Stupid, AviolosAvali, Xilande, Sbubby, Seadubbs, Swordodo, Qcom",
                     shadow = false,
                     scale = scale*0.6,
                     colour = G.C.BLACK
@@ -2528,8 +2528,8 @@ SMODS.Joker{ --Chain Lightning
         x = 2,
         y = 3
     },
-    cost = 5,
-    rarity = 1,
+    cost = 6,
+    rarity = 2,
     blueprint_compat = true,
     eternal_compat = true,
     enhancement_gate = 'm_mult',
