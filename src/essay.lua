@@ -1802,7 +1802,6 @@ SMODS.Joker{ --Clown Car
         end
     end
 }
-_RELEASE_MODE = false
 
 SMODS.Joker{ --Ship of Theseus
     name = "Ship of Theseus",
