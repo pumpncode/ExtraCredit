@@ -1682,8 +1682,7 @@ SMODS.Joker{ --Farmer
 
     calculate = function(self, card, context)
         if context.cardarea == G.hand and context.end_of_round and context.individual and not context.repetition and context.other_card:is_suit(G.GAME.current_round.farmer_card.suit) and not context.blueprint then
-            delay(0.4)
-            ease_dollars(2)
+            delay(0.3)
             return {
                 dollars = 2,
                 card = context.other_card
@@ -2100,8 +2099,8 @@ SMODS.Joker{ --Pyromancer
         ['name'] = 'Pyromancer',
         ['text'] = {
             [1] = "{C:mult}+#1#{} Mult if",
-            [2] = "remaining Hands do not",
-            [3] = "exceed remaining Discards",
+            [2] = "remaining {C:attention}Hands{} do not",
+            [3] = "exceed remaining {C:attention}Discards",
         }
     },
     pos = {
@@ -2200,10 +2199,10 @@ SMODS.Joker{ --Yin Yang
     loc_txt = {
         ['name'] = 'Yin-Yang',
         ['text'] = {
-            [1] = "Create a Tarot and Planet",
+            [1] = "Create a {C:purple}Tarot{} and {C:planet}Planet",
             [2] = "card at end of round if",
-            [3] = "remaining Hands are equal",
-            [4] = "to remaining Discards"
+            [3] = "remaining {C:attention}Hands{} are {C:attention}equal",
+            [4] = "to remaining {C:attention}Discards"
         }
     },
     pos = {
@@ -2275,7 +2274,7 @@ SMODS.Joker{ --Blackjack
         ['text'] = {
             [1] = "{C:mult}+#1#{} Mult if played",
             [2] = "hand contains a scoring",
-            [3] = "Ace and face card",
+            [3] = "{C:attention}Ace{} and {C:attention}face card",
         }
     },
     pos = {
@@ -2330,8 +2329,8 @@ SMODS.Joker{ --JotY
         ['name'] = 'Joker of the Year',
         ['text'] = {
             [1] = 'If played hand has',
-            [2] = '5 scoring cards,',
-            [3] = "retrigger played cards"
+            [2] = '{C:attention}5{} scoring cards,',
+            [3] = "{C:attention}retrigger{} played cards"
         }
     },
     pos = {
@@ -2374,7 +2373,7 @@ SMODS.Joker{ --Average Alice
         ['text'] = {
             [1] = "{C:white,X:mult}X#1#{} Mult if played",
             [2] = "hand contains a scoring",
-            [3] = "Odd and Even card",
+            [3] = "{C:attention}Odd{} and {C:attention}Even{} card",
         }
     },
     pos = {
@@ -2425,8 +2424,8 @@ SMODS.Joker{ --Coupon Book
     loc_txt = {
         ['name'] = 'Coupon Book',
         ['text'] = {
-            [1] = "Spawn a Voucher Tag",
-            [2] = "after Boss Blind is defeated"
+            [1] = "Create a {C:attention}Voucher Tag",
+            [2] = "after {C:attention}Boss Blind{} is defeated"
         }
     },
     pos = {
@@ -2448,6 +2447,7 @@ SMODS.Joker{ --Coupon Book
 
     calculate = function(self, card, context)
         if context.end_of_round and not context.repetition and not context.individual and G.GAME.blind.boss and not context.blueprint then
+            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "+1 Voucher Tag!", colour = G.C.FILTER})
             G.E_MANAGER:add_event(Event({
                 func = (function()
                     add_tag(Tag('tag_voucher'))
@@ -2470,7 +2470,7 @@ SMODS.Joker{ --Hoarder
         ['name'] = 'Hoarder',
         ['text'] = {
             [1] = "This Joker gains {C:money}$#1#{} of sell value",
-            [2] = "whenever money is earned"
+            [2] = "whenever {C:money}money{} is earned"
         }
     },
     pos = {
@@ -2520,8 +2520,8 @@ SMODS.Joker{ --Chain Lightning
         ['name'] = 'Chain Lightning',
         ['text'] = {
             [1] = 'Played {C:attention}Mult Cards{} give',
-            [2] = '{C:mult}+#1#{} Mult when scored,',
-            [3] = 'then increase this by X#2#'
+            [2] = '{X:mult,C:white}X#1#{} Mult when scored,',
+            [3] = 'then increase this by {X:mult,C:white}X#2#'
         }
     },
     pos = {
@@ -2582,10 +2582,10 @@ SMODS.Joker{ --Joka Lisa
     loc_txt = {
         ['name'] = 'Joka Lisa',
         ['text'] = {
-            [1] = 'Gains X#2# Mult for',
-            [2] = 'each unique enhancement',
+            [1] = 'Gains {X:mult,C:white}X#2#{} Mult for',
+            [2] = 'each {C:attention}unique enhancement',
             [3] = 'in scoring hand',
-            [4] = '(Currently X#1#)'
+            [4] = '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})'
         }
     },
     pos = {
@@ -2645,8 +2645,8 @@ SMODS.Joker{ --Bad Apple
         ['name'] = 'Bad Apple',
         ['text'] = {
             [1] = "{C:chips}+#1#{} Chips",
-            [2] = "A random joker is destroyed",
-            [3] = "after Boss Blind is defeated"
+            [2] = "A random {C:attention}Joker{} is {C:red,E:2}destroyed",
+            [3] = "after {C:attention}Boss Blind{} is defeated"
         }
     },
     pos = {
@@ -2701,9 +2701,9 @@ SMODS.Joker{ --Passport
     loc_txt = {
         ['name'] = 'Passport',
         ['text'] = {
-            [1] = "Once each ante, if final",
-            [2] = "discard of round has only 1",
-            [3] = "card, it gains a random Seal"
+            [1] = "Once each {C:attention}ante{}, if {C:attention}final",
+            [2] = "{C:attention}discard{} of round has only {C:attention}1",
+            [3] = "card, it gains a random {C:attention}Seal"
         }
     },
     pos = {
