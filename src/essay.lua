@@ -2,6 +2,7 @@ local mod = SMODS.current_mod
 SMODS.Atlas({key = "ECjokers", path = "ECjokers.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 
 ECconfig = SMODS.current_mod.config
+SMODS.current_mod.optional_features = { quantum_enhancements = true }
 
 SMODS.current_mod.extra_tabs = function() --Credits tab
     local scale = 0.5
@@ -44,7 +45,7 @@ SMODS.current_mod.extra_tabs = function() --Credits tab
                 {
                     n = G.UIT.T,
                     config = {
-                    text = "Artists: kittyknight, UselessReptile8, Wingcap,",
+                    text = "Artists: kittyknight, UselessReptile8, Wingcap, Honukane,",
                     shadow = false,
                     scale = scale,
                     colour = G.C.MONEY
@@ -62,7 +63,7 @@ SMODS.current_mod.extra_tabs = function() --Credits tab
                     {
                     n = G.UIT.T,
                     config = {
-                        text = "Honukane, bishopcorrigan, tuzzo, R3venantR3mnant, Neato",
+                        text = "bishopcorrigan, tuzzo, R3venantR3mnant, Neato, Sacto",
                         shadow = false,
                         scale = scale,
                         colour = G.C.MONEY
@@ -585,6 +586,7 @@ SMODS.Joker{ --Warlock
             if pseudorandom('witch') < G.GAME.probabilities.normal / card.ability.extra.odds then
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    
                     G.E_MANAGER:add_event(Event({
                         trigger = 'before',
                         delay = 0.0,
@@ -593,7 +595,7 @@ SMODS.Joker{ --Warlock
                                 card:add_to_deck()
                                 G.consumeables:emplace(card)
                                 G.GAME.consumeable_buffer = 0
-                                context.other_card:juice_up(0.5, 0.5)
+                                
                             return true
                         end)}))
                     card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral})
@@ -2380,8 +2382,8 @@ SMODS.Joker{ --Average Alice
         x = 2,
         y = 4
     },
-    cost = 5,
-    rarity = 1,
+    cost = 6,
+    rarity = 2,
     blueprint_compat = true,
     eternal_compat = true,
     unlocked = true,
@@ -2414,15 +2416,15 @@ SMODS.Joker{ --Average Alice
     end
 }
 
-SMODS.Joker{ --Coupon Book
-    name = "Coupon Book",
-    key = "couponbook",
+SMODS.Joker{ --Coupons
+    name = "Coupons",
+    key = "coupons",
     config = {
         extra = {
             }
         },
     loc_txt = {
-        ['name'] = 'Coupon Book',
+        ['name'] = 'Coupons',
         ['text'] = {
             [1] = "Create a {C:attention}Voucher Tag",
             [2] = "after {C:attention}Boss Blind{} is defeated"
@@ -2478,7 +2480,7 @@ SMODS.Joker{ --Hoarder
         y = 3
     },
     cost = 5,
-    rarity = 1,
+    rarity = 2,
     blueprint_compat = false,
     eternal_compat = true,
     unlocked = true,
@@ -2521,7 +2523,8 @@ SMODS.Joker{ --Chain Lightning
         ['text'] = {
             [1] = 'Played {C:attention}Mult Cards{} give',
             [2] = '{X:mult,C:white}X#1#{} Mult when scored,',
-            [3] = 'then increase this by {X:mult,C:white}X#2#'
+            [3] = 'then increase this by {X:mult,C:white}X#2#',
+            [4] = '{C:inactive}(Resets each hand)'
         }
     },
     pos = {
@@ -2558,12 +2561,13 @@ SMODS.Joker{ --Chain Lightning
             if thunk > 1 then
                 return{
                     x_mult = thunk,
-                    card = context.other_card
+                    card = card
                 }
             end
 
         elseif context.after then 
             card.ability.extra.total = 0
+            card.ability.extra.Xmult = 1
         end
     end
 }
@@ -2756,8 +2760,8 @@ SMODS.Joker{ --Lucky 7
         x = 7,
         y = 3
     },
-    cost = 7,
-    rarity = 2,
+    cost = 4,
+    rarity = 1,
     blueprint_compat = false,
     eternal_compat = true,
     unlocked = true,
@@ -2769,7 +2773,9 @@ SMODS.Joker{ --Lucky 7
     end,
     calculate = function(self, card, context)
         if context.check_enhancement and SMODS.Ranks[context.other_card.base.value].key == "7" then
-            return {m_lucky = true}
+            return{
+                m_lucky = true
+            }
         end
     end
 }
