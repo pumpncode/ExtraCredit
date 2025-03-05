@@ -45,7 +45,7 @@ SMODS.current_mod.extra_tabs = function() --Credits tab
                 {
                     n = G.UIT.T,
                     config = {
-                    text = "Artists: kittyknight, UselessReptile8, Wingcap, Honukane,",
+                    text = "Artists: kittyknight, UselessReptile8, Wingcap, HonuKane,",
                     shadow = false,
                     scale = scale,
                     colour = G.C.MONEY
