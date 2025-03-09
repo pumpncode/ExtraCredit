@@ -2299,11 +2299,13 @@ SMODS.Joker{ --Blackjack
         if context.cardarea == G.jokers and context.joker_main then
             local _ace, _face = false, false
             for i = 1, #context.scoring_hand do
-                if context.scoring_hand[i]:get_id() == 14 then
-                    _ace = true
-                end
-                if context.scoring_hand[i]:is_face() then
-                    _face = true
+                if not SMODS.has_no_rank(context.scoring_hand[i]) then
+                    if context.scoring_hand[i]:get_id() == 14 then
+                        _ace = true
+                    end
+                    if context.scoring_hand[i]:is_face() then
+                        _face = true
+                    end
                 end
             end
 
@@ -2398,11 +2400,13 @@ SMODS.Joker{ --Average Alice
         if context.cardarea == G.jokers and context.joker_main then
             local _odd, _even = false, false
             for i = 1, #context.scoring_hand do
-                if contains({14,3,5,7,9}, context.scoring_hand[i]:get_id()) and context.scoring_hand[i].ability.name ~= "Stone Card" then
-                    _odd = true
-                end
-                if contains({2,4,6,8,10}, context.scoring_hand[i]:get_id()) and context.scoring_hand[i].ability.name ~= "Stone Card" then
-                    _even = true
+                if not SMODS.has_no_rank(context.scoring_hand[i]) then
+                    if contains({14,3,5,7,9}, context.scoring_hand[i]:get_id()) and context.scoring_hand[i].ability.name ~= "Stone Card" then
+                        _odd = true
+                    end
+                    if contains({2,4,6,8,10}, context.scoring_hand[i]:get_id()) and context.scoring_hand[i].ability.name ~= "Stone Card" then
+                        _even = true
+                    end
                 end
             end
 
@@ -2613,9 +2617,11 @@ SMODS.Joker{ --Joka Lisa
         if context.before and not context.blueprint then
             local enhanced = {}
             for i=1, #context.scoring_hand do
-                if context.scoring_hand[i].ability.set == 'Enhanced' then
-                    if not contains(enhanced, context.scoring_hand[i].ability.name) then
-                        enhanced[#enhanced+1] = context.scoring_hand[i].ability.name
+                for k, v in pairs(SMODS.get_enhancements(context.scoring_hand[i])) do
+                    if v then
+                        if not contains(enhanced, k) then
+                            enhanced[#enhanced+1] = k
+                        end
                     end
                 end
             end
