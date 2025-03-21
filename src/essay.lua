@@ -2800,10 +2800,8 @@ SMODS.Joker{ --Lucky 7
         end
 
         if context.after then
-            if thunk then
-                for i=1, #context.scoring_hand do
-                    context.other_card.gambling = nil
-                end
+            for i=1, #context.scoring_hand do
+                context.scoring_hand[i].gambling = nil
             end
         end
     end
