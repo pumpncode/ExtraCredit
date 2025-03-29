@@ -198,8 +198,18 @@ local function contains(table_, value)
 
     return false
 end
-local function sum_levels()
-    return ((G.GAME.hands['High Card'].level)+(G.GAME.hands['Pair'].level)+(G.GAME.hands['Two Pair'].level)+(G.GAME.hands['Three of a Kind'].level)+(G.GAME.hands['Straight'].level)+(G.GAME.hands['Flush'].level)+(G.GAME.hands['Full House'].level )+(G.GAME.hands['Four of a Kind'].level)+(G.GAME.hands['Straight Flush'].level)+(G.GAME.hands['Five of a Kind'].level)+(G.GAME.hands['Flush House'].level)+(G.GAME.hands['Flush Five'].level))
+local function eclipse_sum_levels()
+    local total_hands = to_big(0)
+    local total_levels = to_big(0)
+
+    for hand, data in pairs(G.GAME.hands) do
+        -- We should ignore hands which level is 0 or less for description consistency.
+        if data.level >= to_big(1) then
+            total_hands = total_hands + to_big(1)
+            total_levels = total_levels + data.level
+        end
+    end
+    return total_levels, total_hands
 end
 local ed = ease_dollars
 function ease_dollars(mod, x)
@@ -409,16 +419,21 @@ SMODS.Joker{ --Eclipse
     atlas = 'ECjokers',
 
     loc_vars = function(self, info_queue, card)
-        return {vars = {((sum_levels()-12)*card.ability.extra.chip_mod), card.ability.extra.chip_mod}}
+        local levels, hands = eclipse_sum_levels()
+        return {vars = {((levels-hands)*card.ability.extra.chip_mod), card.ability.extra.chip_mod}}
     end,
 
     calculate = function(self, card, context)
-        if context.cardarea == G.jokers and (sum_levels() - 12) > 0 and context.joker_main then
-            return {
-                message = localize{type='variable',key='a_chips',vars={(sum_levels()-12)*card.ability.extra.chip_mod}},
-                chip_mod = (sum_levels()-12)*card.ability.extra.chip_mod,
-                colour = G.C.CHIPS
-            }
+        if context.cardarea == G.jokers and context.joker_main then
+            local levels, hands = eclipse_sum_levels()
+            local chips = (levels - hands) * card.ability.extra.chip_mod
+            if chips > to_big(0) then
+                return {
+                    message = localize{type='variable',key='a_chips',vars={chips}},
+                    chip_mod = chips,
+                    colour = G.C.CHIPS
+                }
+            end
         end
     end
 }
