@@ -2951,34 +2951,34 @@ SMODS.Back{ --Bazaar Deck
 	atlas = "ECother"
 }
 
--- no art yet lol but feel free to uncomment and play with them
+SMODS.Back{ --Archeology Deck
+    name = "Archeology Deck",
+	key = "archeologydeck",  
+  loc_txt = {      
+    name = 'Archeology Deck',      
+    text = {
+      "Start in {C:attention}Ante 0",
+      "{C:attention}-1{} hand size"
+    } 
+  }, 
+	order = 17,
+  unlocked = true,
+  discovered = true,
+	config = {},
+  loc_vars = function(self, info_queue, center)
+    return {vars = {}}
+  end,
+	pos = { x = 1, y = 0 },
+	atlas = "ECother",
+  apply = function(self, back)
+    ease_ante(-1)
+    G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
+    G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - 1
+    G.GAME.starting_params.hand_size = G.GAME.starting_params.hand_size - 1
+  end
+}
 
--- SMODS.Back{ --Archeology Deck
---     name = "Archeology Deck",
--- 	key = "archeologydeck",  
---   loc_txt = {      
---     name = 'Archeology Deck',      
---     text = {
---       "Start in {C:attention}Ante 0",
---       "{C:attention}-1{} hand size"
---     } 
---   }, 
--- 	order = 17,
---   unlocked = true,
---   discovered = true,
--- 	config = {},
---   loc_vars = function(self, info_queue, center)
---     return {vars = {}}
---   end,
--- 	pos = { x = 1, y = 0 },
--- 	atlas = "ECjokers",
---   apply = function(self, back)
---     ease_ante(-1)
---     G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
---     G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - 1
---     G.GAME.starting_params.hand_size = G.GAME.starting_params.hand_size - 1
---   end
--- }
+-- no art yet lol but feel free to uncomment and play with them
 
 -- SMODS.Back{ --Echo Deck
 --     name = "Echo Deck",
