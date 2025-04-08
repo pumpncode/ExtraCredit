@@ -23,6 +23,7 @@ Art:
 - R3venantR3mnant
 - Neato
 - Sacto
+- Gote
 - CampfireCollective
 
 Concepting:
