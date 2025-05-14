@@ -216,7 +216,7 @@ local ed = ease_dollars
 function ease_dollars(mod, x)
     ed(mod, x)
     for i = 1, #G.jokers.cards do
-        local effects = G.jokers.cards[i]:calculate_joker({ EC_ease_dollars = to_big(mod) })
+	eval_card(G.jokers.cards[i], { EC_ease_dollars = to_big(mod)})
     end
 end
 
