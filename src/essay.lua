@@ -1,4 +1,5 @@
 local mod = SMODS.current_mod
+SMODS.Atlas({key = "modicon", path = "modicon.png", px = 31, py = 32, atlas_table = "ASSET_ATLAS"}):register()
 SMODS.Atlas({key = "ECjokers", path = "ECjokers.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 SMODS.Atlas({key = "ECother", path = "ECother.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 
@@ -216,7 +217,7 @@ local ed = ease_dollars
 function ease_dollars(mod, x)
     ed(mod, x)
     for i = 1, #G.jokers.cards do
-        local effects = G.jokers.cards[i]:calculate_joker({ EC_ease_dollars = to_big(mod) })
+	eval_card(G.jokers.cards[i], { EC_ease_dollars = to_big(mod)})
     end
 end
 
@@ -2813,7 +2814,7 @@ SMODS.Joker{ --Passport
 
     calculate = function(self, card, context)
         if card.ability.extra.stamps > 0 and context.discard and G.GAME.current_round.discards_left == 2 and not context.blueprint then
-            local eval =  function() return G.GAME.current_round.discards_left > 0 end
+            local eval =  function() return G.GAME.current_round.discards_left > 0 and card.ability.extra.stamps > 0 end
             juice_card_until(card, eval, true)
         end
 
@@ -3028,6 +3029,7 @@ SMODS.Back{ --Echo Deck
     end
   end
 }
+
 
 -- Resets
 
