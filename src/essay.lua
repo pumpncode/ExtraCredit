@@ -1,4 +1,5 @@
 local mod = SMODS.current_mod
+SMODS.Atlas({key = "modicon", path = "modicon.png", px = 31, py = 32, atlas_table = "ASSET_ATLAS"}):register()
 SMODS.Atlas({key = "ECjokers", path = "ECjokers.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 SMODS.Atlas({key = "ECother", path = "ECother.png", px = 71, py = 95, atlas_table = "ASSET_ATLAS"}):register()
 
